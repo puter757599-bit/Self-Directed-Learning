@@ -1,1583 +1,240 @@
 <!DOCTYPE html>
-<html lang="zh-TW" class="scroll-smooth">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NTSRL 新北市自主學習季刊 | 數位典藏與閱讀平台</title>
-  <!-- Tailwind CSS CDN -->
+  <title>NTSRL 自主學習季刊 - 新北市促進自主學習課堂實踐行動工作圈</title>
+  <!-- 載入 Tailwind CSS 樣式庫 -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter & Noto Serif TC / Noto Sans TC -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
-  <!-- Phosphor Icons for elegant UI symbols -->
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Noto Sans TC"', 'Inter', 'sans-serif'],
-            serif: ['"Noto Serif TC"', 'Georgia', 'serif'],
-          },
-          colors: {
-            season: {
-              primary: 'var(--season-primary)',
-              secondary: 'var(--season-secondary)',
-              accent: 'var(--season-accent)',
-              surface: 'var(--season-surface)',
-              border: 'var(--season-border)',
-              tag: 'var(--season-tag)',
-            }
-          }
-        }
-      }
-    }
-  </script>
-
   <style>
-    /* 四季色彩主題定義 (符合 WCAG AA 鮮明對比與溫暖雜誌質地) */
-    :root {
-      /* 預設：秋季號 (焦糖栗棕、暖楓橙、米紙底色) */
-      --season-primary: #854d0e;
-      --season-secondary: #b45309;
-      --season-accent: #d97706;
-      --season-surface: #fefcf9;
-      --season-card: #ffffff;
-      --season-border: #f3e8d6;
-      --season-tag: #fef3c7;
-      --reading-bg: #fdfbf7;
-      --text-main: #1c1917;
-      --text-muted: #57534e;
-    }
-
-    /* 春季版 (櫻粉春櫻嫩綠、淡雅純淨) */
-    body[data-season="spring"] {
-      --season-primary: #15803d;
-      --season-secondary: #059669;
-      --season-accent: #e11d48;
-      --season-surface: #fcfdfa;
-      --season-card: #ffffff;
-      --season-border: #e2ebd8;
-      --season-tag: #dcfce7;
-      --reading-bg: #fbfdf9;
-      --text-main: #142217;
-      --text-muted: #4a5c4f;
-    }
-
-    /* 夏季版 (清新薄荷、湛藍海風) */
-    body[data-season="summer"] {
-      --season-primary: #0369a1;
-      --season-secondary: #0284c7;
-      --season-accent: #0ea5e9;
-      --season-surface: #f8fafc;
-      --season-card: #ffffff;
-      --season-border: #e0f2fe;
-      --season-tag: #e0f2fe;
-      --reading-bg: #f8fafc;
-      --text-main: #0f172a;
-      --text-muted: #475569;
-    }
-
-    /* 秋季版 (溫暖楓葉、沉穩大地大地棕) */
-    body[data-season="autumn"] {
-      --season-primary: #854d0e;
-      --season-secondary: #b45309;
-      --season-accent: #c2410c;
-      --season-surface: #fefcf9;
-      --season-card: #ffffff;
-      --season-border: #f5e8d8;
-      --season-tag: #ffedd5;
-      --reading-bg: #fffbf5;
-      --text-main: #292524;
-      --text-muted: #57534e;
-    }
-
-    /* 冬季版 (沉靜霧灰、冰川深藍) */
-    body[data-season="winter"] {
-      --season-primary: #334155;
-      --season-secondary: #475569;
-      --season-accent: #2563eb;
-      --season-surface: #f8fafc;
-      --season-card: #ffffff;
-      --season-border: #e2e8f0;
-      --season-tag: #f1f5f9;
-      --reading-bg: #f8fafc;
-      --text-main: #0f172a;
-      --text-muted: #475569;
-    }
-
-    /* 護眼暖紙閱讀色調 */
-    body.paper-mode {
-      --season-surface: #f6f1e8 !important;
-      --season-card: #fffdf9 !important;
-      --reading-bg: #f4eee2 !important;
-      --season-border: #ebdcc8 !important;
-      --text-main: #2b2621 !important;
-      --text-muted: #6b635b !important;
-    }
-
-    /* 暗黑尊榮夜讀模式 */
-    body.dark-mode {
-      --season-surface: #121212 !important;
-      --season-card: #1e1e1e !important;
-      --reading-bg: #161616 !important;
-      --season-border: #2e2e2e !important;
-      --season-tag: #2a2a2a !important;
-      --text-main: #f3f4f6 !important;
-      --text-muted: #9ca3af !important;
-    }
-
-    body {
-      background-color: var(--season-surface);
-      color: var(--text-main);
-      transition: background-color 0.35s ease, color 0.35s ease;
-    }
-
-    /* 閱讀字型大小控制 */
-    .font-size-sm { font-size: 0.95rem; line-height: 1.8; }
-    .font-size-md { font-size: 1.08rem; line-height: 1.95; }
-    .font-size-lg { font-size: 1.25rem; line-height: 2.1; }
-
-    /* 雜誌排版裝飾 */
-    .dropcap::first-letter {
-      float: left;
-      font-size: 3.6rem;
-      line-height: 0.85;
-      padding-top: 4px;
-      padding-right: 12px;
-      padding-bottom: 2px;
-      font-family: "Noto Serif TC", serif;
-      font-weight: 700;
-      color: var(--season-primary);
-    }
-
-    /* 隱藏原生卷軸但保有滑動能力 */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-    /* 自訂平滑進度條 */
-    #reading-progress {
-      background: linear-gradient(90deg, var(--season-secondary), var(--season-primary));
+    html {
+      scroll-behavior: smooth;
     }
   </style>
 </head>
+<body class="bg-gray-50 text-gray-800 antialiased font-sans">
 
-<body data-season="autumn" class="font-sans antialiased text-stone-800 selection:bg-amber-100 selection:text-amber-900">
-
-  <!-- 頂部即時閱讀進度指示器 -->
-  <div class="fixed top-0 left-0 w-full h-1.5 z-50 bg-stone-200/50">
-    <div id="reading-progress" class="h-full w-0 transition-all duration-150"></div>
-  </div>
-
-  <!-- 導航列 Header -->
-  <header class="sticky top-0 z-40 backdrop-blur-md bg-white/90 border-b border-stone-200/80 transition-colors shadow-sm" id="main-nav">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-18 py-3">
-        
-        <!-- 品牌識別 -->
-        <div class="flex items-center gap-3.5">
-          <a href="#hero" class="flex items-center gap-3 group">
-            <div class="w-10 h-10 rounded-xl bg-season-primary text-white flex items-center justify-center font-serif font-black text-xl shadow-md group-hover:scale-105 transition-transform">
-              自
-            </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="font-serif font-bold text-lg sm:text-xl tracking-tight text-season-primary">NTSRL 自主學習季刊</span>
-                <span class="text-xs px-2 py-0.5 rounded-full font-medium bg-season-tag text-season-primary border border-season-primary/20" id="current-badge">2026 秋季號</span>
-              </div>
-              <p class="text-[11px] text-stone-500 hidden sm:block tracking-wide">新北市促進自主學習課堂實踐行動工作圈</p>
-            </div>
-          </a>
+  <!-- 頂部吸頂導覽列 -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      
+      <!-- 左側：識別 Logo 與主副標題 (垂直居中、不被擠壓) -->
+      <div class="flex items-center space-x-3 shrink-0">
+        <!-- 綠色自字圓角圖標 -->
+        <div class="w-10 h-10 bg-emerald-700 text-white font-bold rounded-xl flex items-center justify-center text-xl shadow-sm shrink-0">
+          自
         </div>
-
-        <!-- 導航選項 (桌機) -->
-        <nav class="hidden lg:flex items-center gap-1 font-medium text-sm text-stone-700">
-          <a href="#featured" class="px-3.5 py-2 rounded-lg hover:text-season-primary hover:bg-stone-100 transition">本期目錄</a>
-          <a href="#reader" class="px-3.5 py-2 rounded-lg hover:text-season-primary hover:bg-stone-100 transition">文章精讀</a>
-          <a href="#framework" class="px-3.5 py-2 rounded-lg hover:text-season-primary hover:bg-stone-100 transition">5要素15原則</a>
-          <a href="#gallery" class="px-3.5 py-2 rounded-lg hover:text-season-primary hover:bg-stone-100 transition">校園實踐相簿</a>
-          <a href="#archive" class="px-3.5 py-2 rounded-lg hover:text-season-primary hover:bg-stone-100 transition">歷期典藏</a>
-          <a href="#about" class="px-3.5 py-2 rounded-lg hover:text-season-primary hover:bg-stone-100 transition">關於工作圈</a>
-        </nav>
-
-        <!-- 讀者自訂工具列：四季切換、字體、紙質 -->
-        <div class="flex items-center gap-2">
-          
-          <!-- 四季主題切換按鈕組 -->
-          <div class="flex items-center bg-stone-100/90 p-1 rounded-xl border border-stone-200 text-xs font-medium">
-            <button onclick="setSeason('spring')" title="春季：櫻粉嫩綠" class="season-btn px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition" id="btn-spring">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
-              <span class="hidden md:inline">春</span>
-            </button>
-            <button onclick="setSeason('summer')" title="夏季：清爽薄荷藍" class="season-btn px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition" id="btn-summer">
-              <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block"></span>
-              <span class="hidden md:inline">夏</span>
-            </button>
-            <button onclick="setSeason('autumn')" title="秋季：暖楓大地棕（本期）" class="season-btn px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition shadow-sm bg-white font-bold text-amber-900" id="btn-autumn">
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-600 inline-block"></span>
-              <span class="hidden md:inline">秋</span>
-            </button>
-            <button onclick="setSeason('winter')" title="冬季：冰川霧灰藍" class="season-btn px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition" id="btn-winter">
-              <span class="w-2.5 h-2.5 rounded-full bg-slate-500 inline-block"></span>
-              <span class="hidden md:inline">冬</span>
-            </button>
+        <!-- 標題文字群 -->
+        <div class="flex flex-col justify-center">
+          <div class="flex items-center space-x-2">
+            <span class="text-lg md:text-xl font-bold text-emerald-800 tracking-wide whitespace-nowrap">
+              NTSRL 自主學習季刊
+            </span>
+            <span class="text-xs bg-emerald-100 text-emerald-800 font-medium px-2 py-0.5 rounded-full whitespace-nowrap hidden sm:inline-block">
+              春季版主題 (櫻綠)
+            </span>
           </div>
-
-          <!-- 護眼模式開關 -->
-          <button onclick="togglePaperMode()" id="paper-toggle" title="切換暖紙/預設閱讀底色" class="p-2 rounded-lg border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 transition">
-            <i class="ph ph-scroll text-base"></i>
-          </button>
-
-          <!-- 字級調整 -->
-          <div class="hidden sm:flex items-center bg-stone-100 p-0.5 rounded-lg border border-stone-200 text-xs">
-            <button onclick="adjustFontSize('sm')" class="px-2 py-1 rounded text-stone-600 hover:text-season-primary font-bold">A-</button>
-            <button onclick="adjustFontSize('md')" class="px-2 py-1 rounded bg-white shadow-xs text-season-primary font-bold">A</button>
-            <button onclick="adjustFontSize('lg')" class="px-2 py-1 rounded text-stone-600 hover:text-season-primary font-bold">A+</button>
-          </div>
-
-          <!-- 行動端選單鈕 -->
-          <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-stone-700 rounded-lg hover:bg-stone-100">
-            <i class="ph ph-list text-xl"></i>
-          </button>
+          <p class="text-xs text-gray-500 whitespace-nowrap mt-0.5">
+            新北市促進自主學習課堂實踐行動工作圈
+          </p>
         </div>
-
       </div>
+
+      <!-- 右側：電腦版選單 (嚴格水平排列、垂直居中、文字不折行) -->
+      <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium text-gray-700 shrink-0">
+        <a href="#toc" class="whitespace-nowrap hover:text-emerald-700 transition py-1">本期目錄</a>
+        <a href="#articles" class="whitespace-nowrap hover:text-emerald-700 transition py-1">文章精讀</a>
+        <a href="#principles" class="whitespace-nowrap hover:text-emerald-700 transition py-1">5要素15原則</a>
+        <a href="#gallery" class="whitespace-nowrap hover:text-emerald-700 transition py-1">校園實踐相簿</a>
+        <a href="#archive" class="whitespace-nowrap hover:text-emerald-700 transition py-1">歷期典藏</a>
+        <a href="#about" class="whitespace-nowrap hover:text-emerald-700 transition py-1">關於工作圈</a>
+        
+        <!-- 核心行動按鈕 -->
+        <a href="#feedback" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-4 py-2 rounded-lg shadow-sm hover:opacity-90 transition whitespace-nowrap font-semibold">
+          線上填報 / 回饋
+        </a>
+      </nav>
+
+      <!-- 手機版漢堡選單按鈕 -->
+      <div class="flex items-center lg:hidden">
+        <button id="mobileMenuBtn" type="button" class="text-gray-600 hover:text-emerald-700 p-2 rounded-lg focus:outline-none" aria-label="切換選單">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+          </svg>
+        </button>
+      </div>
+
     </div>
 
-    <!-- 行動端摺疊選單 -->
-    <div id="mobile-menu" class="hidden lg:hidden border-t border-stone-200 bg-white/95 px-4 pt-3 pb-4 space-y-2">
-      <a href="#featured" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-stone-800 font-medium hover:bg-stone-100">本期精選目錄</a>
-      <a href="#reader" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-stone-800 font-medium hover:bg-stone-100">進入文章精讀</a>
-      <a href="#framework" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-stone-800 font-medium hover:bg-stone-100">5要素15原則與3模式</a>
-      <a href="#gallery" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-stone-800 font-medium hover:bg-stone-100">校園現場實踐相簿</a>
-      <a href="#archive" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-stone-800 font-medium hover:bg-stone-100">歷期季刊典藏</a>
+    <!-- 手機版下拉收合抽屜選單 -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-b border-gray-200 px-6 py-4 space-y-3 shadow-md">
+      <a href="#toc" class="block text-gray-700 hover:text-emerald-700 font-medium py-1">本期目錄</a>
+      <a href="#articles" class="block text-gray-700 hover:text-emerald-700 font-medium py-1">文章精讀</a>
+      <a href="#principles" class="block text-gray-700 hover:text-emerald-700 font-medium py-1">5要素15原則</a>
+      <a href="#gallery" class="block text-gray-700 hover:text-emerald-700 font-medium py-1">校園實踐相簿</a>
+      <a href="#archive" class="block text-gray-700 hover:text-emerald-700 font-medium py-1">歷期典藏</a>
+      <a href="#about" class="block text-gray-700 hover:text-emerald-700 font-medium py-1">關於工作圈</a>
+      <a href="#feedback" class="block bg-emerald-600 text-white text-center font-medium py-2 rounded-lg mt-2">線上填報 / 回饋</a>
     </div>
   </header>
 
-  <!-- Hero 旗艦視覺區：期刊封面精神與發刊詞 -->
-  <section id="hero" class="relative overflow-hidden py-14 sm:py-20 border-b border-stone-200/80 bg-gradient-to-b from-stone-50/60 to-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-        
-        <!-- 左側主標與核心理念 -->
-        <div class="lg:col-span-7 space-y-6">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-season-tag text-season-primary border border-season-primary/20">
-            <i class="ph ph-sparkle-fill"></i>
-            115學年度 核心命題專刊
-          </div>
-          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-serif font-black tracking-tight leading-[1.2] text-stone-900">
-            在 <span class="text-season-primary underline decoration-season-accent/40 decoration-wavy decoration-2">AI 的速度</span> 裡，<br>
-            守住學習的深度。
-          </h1>
-          <p class="text-stone-600 text-base sm:text-lg leading-relaxed max-w-2xl font-light">
-            從「自主學習」（SRL）走向「人—AI 協同調節」（HA-CoRL）的共學旅程。新北市 NTSRL 實踐社群走過六年，我們探索科技如何作為思維的鷹架，守護孩子作為學習主體的能動性。
-          </p>
-
-          <div class="flex flex-wrap items-center gap-4 pt-2">
-            <a href="#reader" class="px-6 py-3.5 rounded-xl font-medium text-white bg-season-primary hover:bg-season-secondary transition shadow-md hover:shadow-lg flex items-center gap-2 group">
-              <i class="ph ph-book-open-text text-lg"></i>
-              翻閱本期全篇精讀
-              <i class="ph ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
-            </a>
-            <a href="#gallery" class="px-5 py-3.5 rounded-xl font-medium text-stone-700 bg-white border border-stone-200 hover:bg-stone-50 transition flex items-center gap-2">
-              <i class="ph ph-images-square text-lg text-season-primary"></i>
-              探索夥伴學校影像
-            </a>
-            <button onclick="downloadCurrentIssueNotice()" class="px-4 py-3.5 rounded-xl font-medium text-stone-600 hover:text-stone-900 border border-stone-200 bg-stone-50/50 hover:bg-stone-100 transition flex items-center gap-2">
-              <i class="ph ph-file-pdf text-rose-600 text-lg"></i>
-              下載本期完整 PDF
-            </button>
-          </div>
-
-          <!-- 出版資訊資訊標籤 -->
-          <div class="pt-6 border-t border-stone-200/70 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-stone-500">
-            <div>
-              <span class="block text-stone-400">發行單位</span>
-              <strong class="text-stone-800 font-medium">新北市政府教育局</strong>
-            </div>
-            <div>
-              <span class="block text-stone-400">發行人 / 總編輯</span>
-              <strong class="text-stone-800 font-medium">張明文 / 劉雅琪</strong>
-            </div>
-            <div>
-              <span class="block text-stone-400">本期主編</span>
-              <strong class="text-stone-800 font-medium">陳君武 校長 (福和國中)</strong>
-            </div>
-            <div>
-              <span class="block text-stone-400">研發輔導</span>
-              <strong class="text-stone-800 font-medium">國家教育研究院 團隊</strong>
-            </div>
-          </div>
-        </div>
-
-        <!-- 右側雜誌書封互動預覽卡 -->
-        <div class="lg:col-span-5 flex justify-center">
-          <div class="relative group perspective-1000 max-w-sm w-full">
-            <div class="absolute -inset-2 bg-gradient-to-r from-season-primary to-season-accent rounded-2xl opacity-20 group-hover:opacity-30 blur-xl transition duration-500"></div>
-            <div class="relative bg-white rounded-2xl p-6 shadow-2xl border border-stone-200/90 text-stone-900 transition duration-500 group-hover:-translate-y-1">
-              
-              <!-- 雜誌封面飾條 -->
-              <div class="flex items-center justify-between pb-4 border-b border-stone-200">
-                <span class="text-xs font-mono font-bold tracking-widest text-season-primary uppercase">NTSRL QUARTERLY · 2026</span>
-                <span class="text-xs px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-600 font-serif">第 12 期</span>
-              </div>
-
-              <!-- 封面主圖與視覺標題 -->
-              <div class="mt-6 text-center space-y-3">
-                <div class="w-16 h-16 mx-auto rounded-full bg-season-primary/10 text-season-primary flex items-center justify-center text-3xl font-serif">
-                  秋
-                </div>
-                <div class="space-y-1">
-                  <span class="text-xs tracking-widest text-stone-400 font-semibold uppercase">Special Focus</span>
-                  <h3 class="text-2xl font-serif font-black text-stone-900 leading-snug">邊界與共振</h3>
-                  <p class="text-xs text-season-secondary font-medium">人—AI 協同調節學習的意義與課堂實踐</p>
-                </div>
-              </div>
-
-              <!-- 精選專題速覽清單 -->
-              <div class="mt-6 bg-stone-50 rounded-xl p-4 space-y-2.5 text-xs border border-stone-100">
-                <div class="flex items-start gap-2">
-                  <span class="text-season-primary font-bold">01</span>
-                  <span class="text-stone-700">【主編的話】完成了≠學會了，在人機協作中守住主體</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <span class="text-season-primary font-bold">03</span>
-                  <span class="text-stone-700">【主題報導】國教院洪詠善：HA-CoRL 模式與 515 原則</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <span class="text-season-primary font-bold">11</span>
-                  <span class="text-stone-700">【社群交流】石門、福和：學習契約、SEL 與 AI x PBL</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <span class="text-season-primary font-bold">31</span>
-                  <span class="text-stone-700">【新知報報】陳逸年：從會回答到會辦事的 AI Agent</span>
-                </div>
-              </div>
-
-              <div class="mt-6 pt-4 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500">
-                <span>45 頁全刊實體掃描同步</span>
-                <a href="#reader" class="text-season-primary font-bold hover:underline flex items-center gap-1">
-                  立即線上閱覽 <i class="ph ph-arrow-right"></i>
-                </a>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-      </div>
+  <!-- 主視覺橫幅 (Hero Section) -->
+  <section class="bg-gradient-to-b from-emerald-50/60 to-white py-16 px-4 text-center">
+    <div class="max-w-4xl mx-auto space-y-4">
+      <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+        自主學習課堂實踐行動
+      </span>
+      <h1 class="text-3xl md:text-5xl font-black text-gray-900 leading-tight">
+        深化課堂自主學習歷程
+      </h1>
+      <p class="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        匯聚新北市各級學校推動自主學習之教學現場智慧，落實 5 要素 15 原則之行動反思與課堂實踐。
+      </p>
     </div>
   </section>
 
-  <!-- 本期精彩篇章卡片（索引與速讀導航） -->
-  <section id="featured" class="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-      <div>
-        <div class="text-xs font-bold uppercase tracking-wider text-season-primary mb-1">Issue Navigation</div>
-        <h2 class="text-2xl sm:text-3xl font-serif font-black text-stone-900">本期目錄與專題導覽</h2>
-        <p class="text-stone-500 text-sm mt-1">選取章節可直接跳轉至高解析文字精讀或原篇對照</p>
-      </div>
-      <div class="flex gap-2">
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-stone-100 text-stone-600">
-          共收錄 12 篇專家與師生實踐精粹
-        </span>
-      </div>
-    </div>
+  <!-- 頁面主體內容容器 -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-16">
 
-    <!-- 專題文章卡片網格 -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      
-      <!-- 卡片 1 -->
-      <div class="bg-white rounded-2xl p-6 border border-stone-200 hover:border-season-primary/50 shadow-xs hover:shadow-md transition group flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between text-xs mb-3">
-            <span class="px-2.5 py-1 rounded-full font-semibold bg-amber-50 text-amber-800 border border-amber-200/60">主編的話</span>
-            <span class="text-stone-400 font-mono">P.01 - 02</span>
-          </div>
-          <h3 class="font-serif font-bold text-lg text-stone-900 group-hover:text-season-primary transition leading-snug">
-            在AI的速度裡，守住學習的深度
-          </h3>
-          <p class="text-xs text-stone-500 mt-1 font-medium">陳君武 校長（新北市立福和國中）</p>
-          <p class="text-sm text-stone-600 mt-3 line-clamp-3 leading-relaxed">
-            「完成了」不等於「學會了」；「得到答案」更不等於「擁有能力」。探討如何在人機協作中始終守護孩子能動性，讓共學成為校園文化。
+    <!-- 本期目錄 -->
+    <section id="toc" class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+      <h2 class="text-2xl font-bold text-emerald-800 border-l-4 border-emerald-600 pl-3 mb-6">本期目錄</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:border-emerald-300 transition">
+          <span class="text-xs font-semibold text-emerald-600">專題探討</span>
+          <h3 class="text-base font-bold text-gray-800 mt-1">從動機激發到策略引導：自主學習在課堂的具體著力點</h3>
+          <p class="text-xs text-gray-500 mt-2">作者：新北市自主學習輔導團</p>
+        </div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:border-emerald-300 transition">
+          <span class="text-xs font-semibold text-emerald-600">典範實踐</span>
+          <h3 class="text-base font-bold text-gray-800 mt-1">跨領域自主探究課堂模組：以校訂必修為軸心之經驗分享</h3>
+          <p class="text-xs text-gray-500 mt-2">作者：高國中核心種子學校團隊</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 文章精讀 -->
+    <section id="articles" class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+      <h2 class="text-2xl font-bold text-emerald-800 border-l-4 border-emerald-600 pl-3 mb-6">文章精讀</h2>
+      <div class="space-y-4">
+        <article class="border-b border-gray-100 pb-4">
+          <span class="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded font-medium">實務引導篇</span>
+          <h3 class="text-lg font-bold text-gray-800 mt-2">自主學習計畫撰寫四步驟：目標、策略、檢核與展能</h3>
+          <p class="text-sm text-gray-600 mt-1 leading-relaxed">
+            透過引導工具單協助學生釐清學習需求，設定可量化且具挑戰性的自主學習任務，建立課堂自我調節機制。
           </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 5要素15原則 -->
+    <section id="principles" class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+      <h2 class="text-2xl font-bold text-emerald-800 border-l-4 border-emerald-600 pl-3 mb-6">5要素 15原則 核心架構</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="p-5 rounded-xl border border-emerald-100 bg-emerald-50/30">
+          <h3 class="font-bold text-emerald-800 text-base mb-2">要素一：目標設定與自我規劃</h3>
+          <ul class="text-xs text-gray-600 space-y-1.5 list-disc list-inside">
+            <li>明確可行的學習目標</li>
+            <li>階段性學習歷程規畫</li>
+            <li>資源盤點與可行性評估</li>
+          </ul>
         </div>
-        <div class="mt-5 pt-4 border-t border-stone-100 flex items-center justify-between">
-          <span class="text-xs text-stone-400 flex items-center gap-1"><i class="ph ph-clock"></i> 閱讀約 4 分鐘</span>
-          <button onclick="loadArticle('editor')" class="text-xs font-bold text-season-primary hover:underline flex items-center gap-1">
-            閱讀全文 <i class="ph ph-caret-right"></i>
-          </button>
+        <div class="p-5 rounded-xl border border-emerald-100 bg-emerald-50/30">
+          <h3 class="font-bold text-emerald-800 text-base mb-2">要素二：學習策略與自我監控</h3>
+          <ul class="text-xs text-gray-600 space-y-1.5 list-disc list-inside">
+            <li>彈性調整學習策略</li>
+            <li>定期執行自我檢核</li>
+            <li>遭遇瓶頸的求助途徑</li>
+          </ul>
+        </div>
+        <div class="p-5 rounded-xl border border-emerald-100 bg-emerald-50/30">
+          <h3 class="font-bold text-emerald-800 text-base mb-2">要素三：學習成果與反思深化</h3>
+          <ul class="text-xs text-gray-600 space-y-1.5 list-disc list-inside">
+            <li>多元形式成果呈現</li>
+            <li>同儕互評與經驗共構</li>
+            <li>後設認知與自我反思</li>
+          </ul>
         </div>
       </div>
+    </section>
 
-      <!-- 卡片 2 -->
-      <div class="bg-white rounded-2xl p-6 border border-stone-200 hover:border-season-primary/50 shadow-xs hover:shadow-md transition group flex flex-col justify-between ring-1 ring-season-primary/20">
-        <div>
-          <div class="flex items-center justify-between text-xs mb-3">
-            <span class="px-2.5 py-1 rounded-full font-semibold bg-rose-50 text-rose-800 border border-rose-200/60">重點主題報導</span>
-            <span class="text-stone-400 font-mono">P.03 - 10</span>
-          </div>
-          <h3 class="font-serif font-bold text-lg text-stone-900 group-hover:text-season-primary transition leading-snug">
-            邊界與共振：人—AI 協同調節學習的意義與課堂實踐（上）
-          </h3>
-          <p class="text-xs text-stone-500 mt-1 font-medium">洪詠善 研究員（國家教育研究院）</p>
-          <p class="text-sm text-stone-600 mt-3 line-clamp-3 leading-relaxed">
-            解析國際 OECD「表現與學習的悖論」與後設認知惰性。系統介紹新北市 115 學年度 5要素15原則及 SRL / AI-SRL / HA-CoRL 三種調節模式。
-          </p>
+    <!-- 校園實踐相簿 -->
+    <section id="gallery" class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+      <h2 class="text-2xl font-bold text-emerald-800 border-l-4 border-emerald-600 pl-3 mb-6">校園實踐相簿</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-400 font-medium border border-dashed border-gray-300">
+          課堂共學實況
         </div>
-        <div class="mt-5 pt-4 border-t border-stone-100 flex items-center justify-between">
-          <span class="text-xs text-stone-400 flex items-center gap-1"><i class="ph ph-clock"></i> 閱讀約 12 分鐘</span>
-          <button onclick="loadArticle('theme')" class="text-xs font-bold text-season-primary hover:underline flex items-center gap-1">
-            閱讀全文 <i class="ph ph-caret-right"></i>
-          </button>
+        <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-400 font-medium border border-dashed border-gray-300">
+          自主探究發表
+        </div>
+        <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-400 font-medium border border-dashed border-gray-300">
+          教師社群研討
+        </div>
+        <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-400 font-medium border border-dashed border-gray-300">
+          成果動態展演
         </div>
       </div>
+    </section>
 
-      <!-- 卡片 3 -->
-      <div class="bg-white rounded-2xl p-6 border border-stone-200 hover:border-season-primary/50 shadow-xs hover:shadow-md transition group flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between text-xs mb-3">
-            <span class="px-2.5 py-1 rounded-full font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/60">社群交流站</span>
-            <span class="text-stone-400 font-mono">P.11 - 12</span>
-          </div>
-          <h3 class="font-serif font-bold text-lg text-stone-900 group-hover:text-season-primary transition leading-snug">
-            AI融入自主學習：成為檢視學習的鏡子
-          </h3>
-          <p class="text-xs text-stone-500 mt-1 font-medium">張書涵 教師（石門實驗國中）</p>
-          <p class="text-sm text-stone-600 mt-3 line-clamp-3 leading-relaxed">
-            面對九年級會考，AI 不直接給答案，而是扮演鏡子向學生提問，檢視時間分配盲點，並由學生自主承諾三個可落實的讀書改變。
-          </p>
-        </div>
-        <div class="mt-5 pt-4 border-t border-stone-100 flex items-center justify-between">
-          <span class="text-xs text-stone-400 flex items-center gap-1"><i class="ph ph-clock"></i> 閱讀約 5 分鐘</span>
-          <button onclick="loadArticle('shimen')" class="text-xs font-bold text-season-primary hover:underline flex items-center gap-1">
-            閱讀全文 <i class="ph ph-caret-right"></i>
-          </button>
-        </div>
-      </div>
+    <!-- 歷期典藏與關於工作圈 -->
+    <div class="grid md:grid-cols-2 gap-8">
+      <section id="archive" class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 class="text-xl font-bold text-emerald-800 border-l-4 border-emerald-600 pl-3 mb-4">歷期典藏</h2>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li class="flex justify-between items-center py-2 border-b border-gray-100">
+            <span>2025 冬季號：初探自主課堂實務</span>
+            <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">PDF 瀏覽</span>
+          </li>
+          <li class="flex justify-between items-center py-2 border-b border-gray-100">
+            <span>2025 秋季號：評量回饋與歷程檔案</span>
+            <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">PDF 瀏覽</span>
+          </li>
+        </ul>
+      </section>
 
-      <!-- 卡片 4 -->
-      <div class="bg-white rounded-2xl p-6 border border-stone-200 hover:border-season-primary/50 shadow-xs hover:shadow-md transition group flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between text-xs mb-3">
-            <span class="px-2.5 py-1 rounded-full font-semibold bg-blue-50 text-blue-800 border border-blue-200/60">班級文化實踐</span>
-            <span class="text-stone-400 font-mono">P.13 - 15</span>
-          </div>
-          <h3 class="font-serif font-bold text-lg text-stone-900 group-hover:text-season-primary transition leading-snug">
-            打造自主學習的班級文化——七個習慣與 SEL
-          </h3>
-          <p class="text-xs text-stone-500 mt-1 font-medium">李欣頤 教師（福和國中）</p>
-          <p class="text-sm text-stone-600 mt-3 line-clamp-3 leading-relaxed">
-            透過親師生三方「學習契約」、共學小組「情感帳戶存提款機制」，以及「學習儀表板」自我檢核，落實社會情緒學習與自律習慣。
-          </p>
-        </div>
-        <div class="mt-5 pt-4 border-t border-stone-100 flex items-center justify-between">
-          <span class="text-xs text-stone-400 flex items-center gap-1"><i class="ph ph-clock"></i> 閱讀約 6 分鐘</span>
-          <button onclick="loadArticle('sel')" class="text-xs font-bold text-season-primary hover:underline flex items-center gap-1">
-            閱讀全文 <i class="ph ph-caret-right"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- 卡片 5 -->
-      <div class="bg-white rounded-2xl p-6 border border-stone-200 hover:border-season-primary/50 shadow-xs hover:shadow-md transition group flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between text-xs mb-3">
-            <span class="px-2.5 py-1 rounded-full font-semibold bg-violet-50 text-violet-800 border border-violet-200/60">PBL 與專題</span>
-            <span class="text-stone-400 font-mono">P.16 - 18</span>
-          </div>
-          <h3 class="font-serif font-bold text-lg text-stone-900 group-hover:text-season-primary transition leading-snug">
-            AI x PBL：讓想法動起來，讓創意做出來
-          </h3>
-          <p class="text-xs text-stone-500 mt-1 font-medium">林韋廷 教師（福和國中）</p>
-          <p class="text-sm text-stone-600 mt-3 line-clamp-3 leading-relaxed">
-            結合資訊科技與生活科技，運用 AI 影像辨識與輸送機構打造自動分類裝置。讓學生從「請告訴我怎麼做」轉向「為什麼這樣做與反思」。
-          </p>
-        </div>
-        <div class="mt-5 pt-4 border-t border-stone-100 flex items-center justify-between">
-          <span class="text-xs text-stone-400 flex items-center gap-1"><i class="ph ph-clock"></i> 閱讀約 6 分鐘</span>
-          <button onclick="loadArticle('pbl')" class="text-xs font-bold text-season-primary hover:underline flex items-center gap-1">
-            閱讀全文 <i class="ph ph-caret-right"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- 卡片 6 -->
-      <div class="bg-white rounded-2xl p-6 border border-stone-200 hover:border-season-primary/50 shadow-xs hover:shadow-md transition group flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between text-xs mb-3">
-            <span class="px-2.5 py-1 rounded-full font-semibold bg-cyan-50 text-cyan-800 border border-cyan-200/60">新知報報</span>
-            <span class="text-stone-400 font-mono">P.31 - 35</span>
-          </div>
-          <h3 class="font-serif font-bold text-lg text-stone-900 group-hover:text-season-primary transition leading-snug">
-            生成式 AI 從「會回答」到「會辦事」
-          </h3>
-          <p class="text-xs text-stone-500 mt-1 font-medium">陳逸年 研究教師（高中化學 / 國教院商借）</p>
-          <p class="text-sm text-stone-600 mt-3 line-clamp-3 leading-relaxed">
-            深入剖析搜尋層、對話層到代理層（AI Agent）的三階段演進。公開帶領實習老師般的「委託單心法」與教材轉化品質把關守則。
-          </p>
-        </div>
-        <div class="mt-5 pt-4 border-t border-stone-100 flex items-center justify-between">
-          <span class="text-xs text-stone-400 flex items-center gap-1"><i class="ph ph-clock"></i> 閱讀約 8 分鐘</span>
-          <button onclick="loadArticle('agent')" class="text-xs font-bold text-season-primary hover:underline flex items-center gap-1">
-            閱讀全文 <i class="ph ph-caret-right"></i>
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 核心文章精讀器 (Magazine Reader View) -->
-  <section id="reader" class="py-12 border-t border-stone-200/80 bg-[var(--reading-bg)] transition-colors">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <!-- 精讀器頂部控制列 -->
-      <div class="bg-white/90 backdrop-blur-md rounded-2xl p-4 mb-8 border border-stone-200/90 shadow-sm flex flex-wrap items-center justify-between gap-4 sticky top-20 z-30">
-        <div class="flex items-center gap-2">
-          <i class="ph ph-article text-season-primary text-xl"></i>
-          <span class="text-xs font-bold tracking-wider uppercase text-stone-400">目前閱讀章節：</span>
-          <span id="reader-current-title" class="text-xs font-bold text-stone-800 font-serif">【主題報導】邊界與共振（洪詠善）</span>
-        </div>
-
-        <div class="flex items-center gap-2 overflow-x-auto py-1 max-w-full">
-          <button onclick="loadArticle('editor')" class="article-tab text-xs px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 font-medium whitespace-nowrap transition" data-id="editor">主編的話</button>
-          <button onclick="loadArticle('theme')" class="article-tab text-xs px-3 py-1.5 rounded-lg bg-season-primary text-white font-bold whitespace-nowrap shadow-xs transition" data-id="theme">邊界與共振</button>
-          <button onclick="loadArticle('shimen')" class="article-tab text-xs px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 font-medium whitespace-nowrap transition" data-id="shimen">石門實中</button>
-          <button onclick="loadArticle('sel')" class="article-tab text-xs px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 font-medium whitespace-nowrap transition" data-id="sel">福和SEL</button>
-          <button onclick="loadArticle('pbl')" class="article-tab text-xs px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 font-medium whitespace-nowrap transition" data-id="pbl">AI x PBL</button>
-          <button onclick="loadArticle('voices')" class="article-tab text-xs px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 font-medium whitespace-nowrap transition" data-id="voices">青聽學習</button>
-          <button onclick="loadArticle('agent')" class="article-tab text-xs px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 font-medium whitespace-nowrap transition" data-id="agent">AI 代理層</button>
-          <button onclick="loadArticle('book')" class="article-tab text-xs px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 font-medium whitespace-nowrap transition" data-id="book">新書推薦</button>
-        </div>
-      </div>
-
-      <!-- 文章渲染主容器 -->
-      <article id="article-content-wrapper" class="bg-white rounded-3xl p-6 sm:p-12 shadow-sm border border-stone-200/90 font-size-md transition-all">
-        <!-- 預設動態載入：邊界與共振 洪詠善研究員 -->
-      </article>
-
-    </div>
-  </section>
-
-  <!-- 115學年度 NTSRL 課堂促進自主學習 5要素15原則與3模式互動矩陣展示 -->
-  <section id="framework" class="py-16 bg-white border-t border-stone-200/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto mb-12">
-        <span class="text-xs font-bold uppercase tracking-widest text-season-primary">Pedagogical Framework</span>
-        <h2 class="text-3xl font-serif font-black text-stone-900 mt-2">國民中學促進自主學習課堂 5要素15原則</h2>
-        <p class="text-stone-600 text-sm mt-3 leading-relaxed">
-          115 學年度整合修訂，將數位與 AI 納入課堂觀察與專業共學語言。它不是制式打勾檢核表，而是教師與陪伴專家觀課、議課時的實踐地圖。
+      <section id="about" class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 class="text-xl font-bold text-emerald-800 border-l-4 border-emerald-600 pl-3 mb-4">關於工作圈</h2>
+        <p class="text-sm text-gray-600 leading-relaxed">
+          新北市促進自主學習課堂實踐行動工作圈致力於搭建跨校教學夥伴網絡，結合高國中現場實踐經驗，定期出刊推廣課堂案例與研究成果，落實學生核心素養。
         </p>
-      </div>
-
-      <!-- 5要素卡片群 -->
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-12">
-        <div class="bg-stone-50 rounded-2xl p-5 border border-stone-200 hover:border-season-primary transition">
-          <div class="w-8 h-8 rounded-lg bg-season-primary/10 text-season-primary flex items-center justify-center font-bold text-sm mb-3">1</div>
-          <h4 class="font-bold text-stone-900 mb-2">教學實踐</h4>
-          <ul class="text-xs text-stone-600 space-y-1.5">
-            <li>• 1-1 注重適性學習</li>
-            <li>• 1-2 強調素養導向</li>
-            <li>• 1-3 引導學會學習</li>
-          </ul>
-        </div>
-        <div class="bg-stone-50 rounded-2xl p-5 border border-stone-200 hover:border-season-primary transition">
-          <div class="w-8 h-8 rounded-lg bg-season-primary/10 text-season-primary flex items-center justify-center font-bold text-sm mb-3">2</div>
-          <h4 class="font-bold text-stone-900 mb-2">學習評估</h4>
-          <ul class="text-xs text-stone-600 space-y-1.5">
-            <li>• 2-1 指導評量回饋</li>
-            <li>• 2-2 採用多元評估</li>
-            <li>• 2-3 善用反思調節</li>
-          </ul>
-        </div>
-        <div class="bg-stone-50 rounded-2xl p-5 border border-stone-200 hover:border-season-primary transition">
-          <div class="w-8 h-8 rounded-lg bg-season-primary/10 text-season-primary flex items-center justify-center font-bold text-sm mb-3">3</div>
-          <h4 class="font-bold text-stone-900 mb-2">夥伴關係</h4>
-          <ul class="text-xs text-stone-600 space-y-1.5">
-            <li>• 3-1 建立互為主體關係</li>
-            <li>• 3-2 關懷社會情緒</li>
-            <li>• 3-3 支持自主經驗</li>
-          </ul>
-        </div>
-        <div class="bg-stone-50 rounded-2xl p-5 border border-stone-200 hover:border-season-primary transition">
-          <div class="w-8 h-8 rounded-lg bg-season-primary/10 text-season-primary flex items-center justify-center font-bold text-sm mb-3">4</div>
-          <h4 class="font-bold text-stone-900 mb-2">學習環境</h4>
-          <ul class="text-xs text-stone-600 space-y-1.5">
-            <li>• 4-1 引導運用資源</li>
-            <li>• 4-2 營造共好情境</li>
-            <li>• 4-3 建立信任文化</li>
-          </ul>
-        </div>
-        <div class="bg-stone-50 rounded-2xl p-5 border border-stone-200 hover:border-season-primary transition">
-          <div class="w-8 h-8 rounded-lg bg-season-primary/10 text-season-primary flex items-center justify-center font-bold text-sm mb-3">5</div>
-          <h4 class="font-bold text-stone-900 mb-2">數位與AI</h4>
-          <ul class="text-xs text-stone-600 space-y-1.5">
-            <li>• 5-1 建立資訊與AI倫理</li>
-            <li>• 5-2 應用數位與AI教學</li>
-            <li>• 5-3 培養數位公民</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- 三種調節學習模式對照精準表 -->
-      <div class="bg-stone-50 rounded-2xl p-6 sm:p-8 border border-stone-200">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <h3 class="font-serif font-bold text-xl text-stone-900">三種自我調節學習模式比較</h3>
-            <p class="text-xs text-stone-500 mt-1">「無AI、AI輔助、AI協作」非高低階層，而是依據教學目標彈性切換</p>
-          </div>
-          <span class="text-xs px-3 py-1 bg-white border border-stone-300 rounded-lg text-stone-600 font-mono">
-            來源：洪詠善 (2026) 引自 NTSRL 研發手冊
-          </span>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs sm:text-sm border-collapse">
-            <thead>
-              <tr class="border-b border-stone-300 text-stone-700 bg-stone-100/70">
-                <th class="py-3.5 px-4 font-bold rounded-l-lg">模式名稱</th>
-                <th class="py-3.5 px-4 font-bold">人機關係核心定義</th>
-                <th class="py-3.5 px-4 font-bold">最適合學習情境</th>
-                <th class="py-3.5 px-4 font-bold rounded-r-lg">可觀察的學習證據</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-stone-200">
-              <tr class="hover:bg-white transition">
-                <td class="py-4 px-4 font-bold text-stone-900">
-                  <span class="inline-block w-2.5 h-2.5 rounded-full bg-stone-400 mr-2"></span>SRL<br>
-                  <span class="text-xs font-normal text-stone-500">無AI的自我調節學習</span>
-                </td>
-                <td class="py-4 px-4 text-stone-700">學生設定目標、選擇策略、監控理解與情緒，教師與同儕提供支持。</td>
-                <td class="py-4 px-4 text-stone-600">形成基礎能力、獨立判斷、真實人際互動、身體實作操作。</td>
-                <td class="py-4 px-4 text-stone-600">目標設定卡、筆記策略紀錄、自評與互評、修訂理由表述。</td>
-              </tr>
-              <tr class="hover:bg-white transition">
-                <td class="py-4 px-4 font-bold text-season-primary">
-                  <span class="inline-block w-2.5 h-2.5 rounded-full bg-season-primary mr-2"></span>AI-SRL<br>
-                  <span class="text-xs font-normal text-stone-500">AI輔助的自我調節學習</span>
-                </td>
-                <td class="py-4 px-4 text-stone-700">學生仍是調節主體；AI提供提示、診斷、資源、練習或回饋等可撤除鷹架。</td>
-                <td class="py-4 px-4 text-stone-600">需要即時提示、適性練習題庫、多元表徵、形成性診斷回饋。</td>
-                <td class="py-4 px-4 text-stone-600">採納或拒絕AI建議的具體理由、事實查證紀錄、無AI時的獨立表現。</td>
-              </tr>
-              <tr class="hover:bg-white transition">
-                <td class="py-4 px-4 font-bold text-season-accent">
-                  <span class="inline-block w-2.5 h-2.5 rounded-full bg-season-accent mr-2"></span>HA-CoRL<br>
-                  <span class="text-xs font-normal text-stone-500">人-AI協同調節學習</span>
-                </td>
-                <td class="py-4 px-4 text-stone-700">學生、教師、同儕與AI依任務交換訊息、比較觀點；人保有價值判斷與最終責任。</td>
-                <td class="py-4 px-4 text-stone-600">開放複雜問題、多輪設計優化、原型測試、跨觀點綜合思辨。</td>
-                <td class="py-4 px-4 text-stone-600">人機分工定義、關鍵決策點說明、多版本演進歷程、偏誤檢核日誌。</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
+      </section>
     </div>
-  </section>
 
-  <!-- 自主學習夥伴學校活動實踐相簿（School Activity Gallery） -->
-  <section id="gallery" class="py-16 bg-stone-50/70 border-t border-stone-200/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-widest text-season-primary">Field Documentation</span>
-          <h2 class="text-3xl font-serif font-black text-stone-900 mt-1">自主學習參與學校活動照片與實踐軌跡</h2>
-          <p class="text-stone-500 text-sm mt-1">留存新北市各國中推動自主學習、PBL 跨域實作、專家共備與學生發表的真實時刻</p>
-        </div>
-
-        <!-- 學校與類別篩選標籤 -->
-        <div class="flex flex-wrap items-center gap-1.5 text-xs">
-          <button onclick="filterGallery('all')" class="gallery-filter-btn px-3 py-1.5 rounded-lg bg-season-primary text-white font-bold transition" data-filter="all">全部照片</button>
-          <button onclick="filterGallery('workshop')" class="gallery-filter-btn px-3 py-1.5 rounded-lg bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 transition" data-filter="workshop">跨校共備與行政會議</button>
-          <button onclick="filterGallery('student')" class="gallery-filter-btn px-3 py-1.5 rounded-lg bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 transition" data-filter="student">學生自主發表</button>
-          <button onclick="filterGallery('pbl')" class="gallery-filter-btn px-3 py-1.5 rounded-lg bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 transition" data-filter="pbl">AI x PBL 機電實作</button>
-          <button onclick="filterGallery('class')" class="gallery-filter-btn px-3 py-1.5 rounded-lg bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 transition" data-filter="class">課堂微改變與契約</button>
-        </div>
-      </div>
-
-      <!-- 相簿卡片網格 -->
-      <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-        <!-- 相片 1：行政會議共備 -->
-        <div class="gallery-item group relative bg-white rounded-2xl overflow-hidden border border-stone-200/90 shadow-xs hover:shadow-lg transition cursor-pointer" data-category="workshop" onclick="openLightbox('workshop1')">
-          <div class="aspect-video bg-stone-200 overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80" alt="115學年度行政會議與專家共識會議" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/90 backdrop-blur-sm text-stone-800 shadow-xs">
-              跨校共備會議
-            </span>
-          </div>
-          <div class="p-5">
-            <div class="text-xs text-season-primary font-bold mb-1">福和國中 / 國教院團隊</div>
-            <h4 class="font-bold text-stone-900 group-hover:text-season-primary transition text-base">115學年度第一學期行政與陪伴專家共識會議</h4>
-            <p class="text-xs text-stone-500 mt-2 line-clamp-2 leading-relaxed">
-              教育局與 23 所學校社群齊聚，頒發陪伴專家聘書，發表《NTSRL 協作實務手冊》，強調以 GROW 模式陪伴第一線課堂。
-            </p>
-          </div>
-        </div>
-
-        <!-- 相片 2：AI x PBL 智慧分類軌道實作 -->
-        <div class="gallery-item group relative bg-white rounded-2xl overflow-hidden border border-stone-200/90 shadow-xs hover:shadow-lg transition cursor-pointer" data-category="pbl" onclick="openLightbox('pbl1')">
-          <div class="aspect-video bg-stone-200 overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="AI影像辨識自動分類機電裝置" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/90 backdrop-blur-sm text-stone-800 shadow-xs">
-              AI x PBL 實作
-            </span>
-          </div>
-          <div class="p-5">
-            <div class="text-xs text-season-primary font-bold mb-1">福和國中 / 林韋廷老師課堂</div>
-            <h4 class="font-bold text-stone-900 group-hover:text-season-primary transition text-base">AI 影像辨識與輸送機構自動分揀實驗</h4>
-            <p class="text-xs text-stone-500 mt-2 line-clamp-2 leading-relaxed">
-              學生整合筆電鏡頭影像模型訓練與機構連桿，打造資源回收智能分揀流水線，驗證 AI 在實體世界的邊界與可信度。
-            </p>
-          </div>
-        </div>
-
-        <!-- 相片 3：漳和國中自主學習發表會 -->
-        <div class="gallery-item group relative bg-white rounded-2xl overflow-hidden border border-stone-200/90 shadow-xs hover:shadow-lg transition cursor-pointer" data-category="student" onclick="openLightbox('student1')">
-          <div class="aspect-video bg-stone-200 overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" alt="漳和國中跨校研習學生發表" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/90 backdrop-blur-sm text-stone-800 shadow-xs">
-              學生自主發表
-            </span>
-          </div>
-          <div class="p-5">
-            <div class="text-xs text-season-primary font-bold mb-1">漳和國中 / 跨校教師研習</div>
-            <h4 class="font-bold text-stone-900 group-hover:text-season-primary transition text-base">從籃球巨星到自主學習：許愷恩同學的探究分享</h4>
-            <p class="text-xs text-stone-500 mt-2 line-clamp-2 leading-relaxed">
-              許愷恩等三位同學登上講台，面對國教院學者與數十位跨校師長，自信流暢地發表自己如何從 NBA 興趣展開深度歷程報告。
-            </p>
-          </div>
-        </div>
-
-        <!-- 相片 4：福和國中學習契約與情感帳戶 -->
-        <div class="gallery-item group relative bg-white rounded-2xl overflow-hidden border border-stone-200/90 shadow-xs hover:shadow-lg transition cursor-pointer" data-category="class" onclick="openLightbox('class1')">
-          <div class="aspect-video bg-stone-200 overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80" alt="親師生簽署之學習契約書與儀表板" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/90 backdrop-blur-sm text-stone-800 shadow-xs">
-              SEL 班級文化
-            </span>
-          </div>
-          <div class="p-5">
-            <div class="text-xs text-season-primary font-bold mb-1">福和國中 / 李欣頤老師班級</div>
-            <h4 class="font-bold text-stone-900 group-hover:text-season-primary transition text-base">學習契約書與 725 情感帳戶價目表</h4>
-            <p class="text-xs text-stone-500 mt-2 line-clamp-2 leading-relaxed">
-              結合七個習慣「以終為始」與「雙贏思維」，由親師生三方具名簽署契約，並在教室設立信任存提款機制，培養自主自律。
-            </p>
-          </div>
-        </div>
-
-        <!-- 相片 5：南勢國中社群共備月例會 -->
-        <div class="gallery-item group relative bg-white rounded-2xl overflow-hidden border border-stone-200/90 shadow-xs hover:shadow-lg transition cursor-pointer" data-category="workshop" onclick="openLightbox('workshop2')">
-          <div class="aspect-video bg-stone-200 overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=800&q=80" alt="南勢國中召集之社群月例會共備" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/90 backdrop-blur-sm text-stone-800 shadow-xs">
-              社群實踐召集
-            </span>
-          </div>
-          <div class="p-5">
-            <div class="text-xs text-season-primary font-bold mb-1">南勢國中 / 黃淑君校長主持</div>
-            <h4 class="font-bold text-stone-900 group-hover:text-season-primary transition text-base">重塑「無鐘聲的寒假作業」四階段探究設計</h4>
-            <p class="text-xs text-stone-500 mt-2 line-clamp-2 leading-relaxed">
-              共備聚焦於打破傳統寒假作業，建立「聚焦問題、設定目標、自主監控、成果展演」四大歷程，並將歷程評量提高至 70%。
-            </p>
-          </div>
-        </div>
-
-        <!-- 相片 6：光榮國中與貢寮實中地方創生探究 -->
-        <div class="gallery-item group relative bg-white rounded-2xl overflow-hidden border border-stone-200/90 shadow-xs hover:shadow-lg transition cursor-pointer" data-category="student" onclick="openLightbox('student2')">
-          <div class="aspect-video bg-stone-200 overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80" alt="走入社區的自主探索學習" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/90 backdrop-blur-sm text-stone-800 shadow-xs">
-              新進學校實踐
-            </span>
-          </div>
-          <div class="p-5">
-            <div class="text-xs text-season-primary font-bold mb-1">貢寮實中 & 光榮國中</div>
-            <h4 class="font-bold text-stone-900 group-hover:text-season-primary transition text-base">踏跡展路露新機：社區走讀與 AI 口袋書製作</h4>
-            <p class="text-xs text-stone-500 mt-2 line-clamp-2 leading-relaxed">
-              孩子們走進社區訪談長輩與在地職人，利用 AI 協助整理筆記與美化排版，但堅持由學生親身經歷地方溫度與田野思考。
-            </p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- 歷期季刊典藏庫（Archive & PDF Downloads） -->
-  <section id="archive" class="py-16 bg-white border-t border-stone-200/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-widest text-season-primary">Archive & Legacy</span>
-          <h2 class="text-3xl font-serif font-black text-stone-900 mt-1">歷期季刊典藏與下載專區</h2>
-          <p class="text-stone-500 text-sm mt-1">完備保存每次發表的刊物成果，點擊即可翻閱歷史篇章或下載保存</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs text-stone-400">目前典藏庫容量：</span>
-          <span class="text-xs px-2.5 py-1 rounded bg-stone-100 font-mono font-bold text-stone-700">6 期精選刊物</span>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        <!-- 典藏期數 1：2026 秋季號 (當期) -->
-        <div class="bg-stone-50 rounded-2xl p-5 border-2 border-season-primary/40 relative flex flex-col justify-between">
-          <div class="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full bg-season-primary text-white text-[11px] font-bold shadow-xs">
-            最新發行
-          </div>
-          <div>
-            <div class="w-full aspect-[3/4] bg-gradient-to-br from-amber-700/90 to-amber-950 rounded-xl p-4 text-white flex flex-col justify-between shadow-sm mb-4">
-              <div>
-                <span class="text-[10px] tracking-widest uppercase opacity-75">NTSRL 2026 FALL</span>
-                <h4 class="font-serif font-black text-xl mt-1">秋季號</h4>
-                <p class="text-[11px] text-amber-200 mt-1">邊界與共振：人-AI 協同調節</p>
-              </div>
-              <div class="text-[10px] opacity-75">
-                45 頁全彩 · 23 校實踐
-              </div>
-            </div>
-            <h4 class="font-bold text-stone-900 text-sm">2026年 115學年度 秋季號</h4>
-            <p class="text-xs text-stone-500 mt-1">主編：陳君武 校長</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-200 flex items-center justify-between">
-            <a href="#reader" class="text-xs text-season-primary font-bold hover:underline">線上翻閱</a>
-            <button onclick="downloadPdf('2026-autumn')" class="text-xs px-3 py-1.5 rounded-lg bg-stone-900 text-white font-medium hover:bg-stone-800 transition flex items-center gap-1">
-              <i class="ph ph-download-simple"></i> PDF
-            </button>
-          </div>
-        </div>
-
-        <!-- 典藏期數 2：2026 夏季號 -->
-        <div class="bg-stone-50 rounded-2xl p-5 border border-stone-200 relative flex flex-col justify-between">
-          <div>
-            <div class="w-full aspect-[3/4] bg-gradient-to-br from-sky-700 to-sky-950 rounded-xl p-4 text-white flex flex-col justify-between shadow-sm mb-4">
-              <div>
-                <span class="text-[10px] tracking-widest uppercase opacity-75">NTSRL 2026 SUMMER</span>
-                <h4 class="font-serif font-black text-xl mt-1">夏季號</h4>
-                <p class="text-[11px] text-sky-200 mt-1">自主學習多元評量與學案實踐</p>
-              </div>
-              <div class="text-[10px] opacity-75">
-                38 頁全彩 · 評量專案
-              </div>
-            </div>
-            <h4 class="font-bold text-stone-900 text-sm">2026年 114學年度 夏季號</h4>
-            <p class="text-xs text-stone-500 mt-1">主編：馮宜欣 校長</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-200 flex items-center justify-between">
-            <button onclick="alertArchivedNotice('2026 夏季號')" class="text-xs text-stone-600 hover:text-stone-900 font-medium">查看目錄</button>
-            <button onclick="downloadPdf('2026-summer')" class="text-xs px-3 py-1.5 rounded-lg bg-white border border-stone-300 text-stone-700 font-medium hover:bg-stone-100 transition flex items-center gap-1">
-              <i class="ph ph-download-simple"></i> PDF
-            </button>
-          </div>
-        </div>
-
-        <!-- 典藏期數 3：2026 春季號 -->
-        <div class="bg-stone-50 rounded-2xl p-5 border border-stone-200 relative flex flex-col justify-between">
-          <div>
-            <div class="w-full aspect-[3/4] bg-gradient-to-br from-emerald-700 to-emerald-950 rounded-xl p-4 text-white flex flex-col justify-between shadow-sm mb-4">
-              <div>
-                <span class="text-[10px] tracking-widest uppercase opacity-75">NTSRL 2026 SPRING</span>
-                <h4 class="font-serif font-black text-xl mt-1">春季號</h4>
-                <p class="text-[11px] text-emerald-200 mt-1">素養導向課堂的微改變之路</p>
-              </div>
-              <div class="text-[10px] opacity-75">
-                42 頁全彩 · 實踐典範
-              </div>
-            </div>
-            <h4 class="font-bold text-stone-900 text-sm">2026年 114學年度 春季號</h4>
-            <p class="text-xs text-stone-500 mt-1">主編：黃淑君 校長</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-200 flex items-center justify-between">
-            <button onclick="alertArchivedNotice('2026 春季號')" class="text-xs text-stone-600 hover:text-stone-900 font-medium">查看目錄</button>
-            <button onclick="downloadPdf('2026-spring')" class="text-xs px-3 py-1.5 rounded-lg bg-white border border-stone-300 text-stone-700 font-medium hover:bg-stone-100 transition flex items-center gap-1">
-              <i class="ph ph-download-simple"></i> PDF
-            </button>
-          </div>
-        </div>
-
-        <!-- 典藏期數 4：2025 冬季號 -->
-        <div class="bg-stone-50 rounded-2xl p-5 border border-stone-200 relative flex flex-col justify-between">
-          <div>
-            <div class="w-full aspect-[3/4] bg-gradient-to-br from-slate-700 to-slate-900 rounded-xl p-4 text-white flex flex-col justify-between shadow-sm mb-4">
-              <div>
-                <span class="text-[10px] tracking-widest uppercase opacity-75">NTSRL 2025 WINTER</span>
-                <h4 class="font-serif font-black text-xl mt-1">冬季號</h4>
-                <p class="text-[11px] text-slate-300 mt-1">四學學案與師生對話社群</p>
-              </div>
-              <div class="text-[10px] opacity-75">
-                40 頁全彩 · 跨域創發
-              </div>
-            </div>
-            <h4 class="font-bold text-stone-900 text-sm">2025年 114學年度 冬季號</h4>
-            <p class="text-xs text-stone-500 mt-1">主編：陳喬禹 校長</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-200 flex items-center justify-between">
-            <button onclick="alertArchivedNotice('2025 冬季號')" class="text-xs text-stone-600 hover:text-stone-900 font-medium">查看目錄</button>
-            <button onclick="downloadPdf('2025-winter')" class="text-xs px-3 py-1.5 rounded-lg bg-white border border-stone-300 text-stone-700 font-medium hover:bg-stone-100 transition flex items-center gap-1">
-              <i class="ph ph-download-simple"></i> PDF
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 關於 NTSRL 工作圈與版權頁資訊 -->
-  <section id="about" class="py-16 bg-stone-100/60 border-t border-stone-200/90 text-stone-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-        
-        <div class="md:col-span-5 space-y-4">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-season-primary text-white flex items-center justify-center font-serif font-bold text-base">
-              自
-            </div>
-            <span class="font-serif font-black text-lg text-stone-900">新北市促進自主學習課堂實踐行動工作圈</span>
-          </div>
-          <p class="text-xs leading-relaxed text-stone-600">
-            NTSRL 自 2020 年深耕迄今，連結國家教育研究院、師資培育大學專家與新北市國中現場領導者。我們相信：「自主學習是學生的課，也是教師的路。」從每一個做得到的課堂微改變出發，讓改變在校園的日常裡生生不息。
-          </p>
-          <div class="text-xs text-stone-500 space-y-1 pt-2">
-            <div>聯絡地址：23450 新北市永和區永利路 71 號（新北市立福和國中）</div>
-            <div>發行單位：新北市政府教育局中等教育科</div>
-            <div>美編印製：美頡設計印刷有限公司</div>
-          </div>
-        </div>
-
-        <div class="md:col-span-7 bg-white rounded-2xl p-6 border border-stone-200/80 shadow-xs">
-          <h4 class="text-xs font-bold uppercase tracking-widest text-season-primary mb-3">115學年度 核心推動團隊</h4>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-4 text-xs">
-            <div>
-              <span class="text-stone-400 block">計畫主持人</span>
-              <strong class="text-stone-800">洪詠善 研究員</strong>
-            </div>
-            <div>
-              <span class="text-stone-400 block">共同主持人</span>
-              <strong class="text-stone-800">鄭章華、隋奇融</strong>
-            </div>
-            <div>
-              <span class="text-stone-400 block">協同主持人</span>
-              <strong class="text-stone-800">謝名娟 研究員</strong>
-            </div>
-            <div>
-              <span class="text-stone-400 block">總召集學校</span>
-              <strong class="text-stone-800">陳君武 校長（福和）</strong>
-            </div>
-            <div>
-              <span class="text-stone-400 block">實踐社群召集</span>
-              <strong class="text-stone-800">黃淑君 校長（南勢）</strong>
-            </div>
-            <div>
-              <span class="text-stone-400 block">實踐社群副召集</span>
-              <strong class="text-stone-800">陳喬禹 校長（漳和）</strong>
-            </div>
-            <div>
-              <span class="text-stone-400 block">測驗召集學校</span>
-              <strong class="text-stone-800">余 禎 校長（中正）</strong>
-            </div>
-            <div>
-              <span class="text-stone-400 block">成果發表召集</span>
-              <strong class="text-stone-800">馮宜欣 校長（育林）</strong>
-            </div>
-            <div>
-              <span class="text-stone-400 block">外埠參訪召集</span>
-              <strong class="text-stone-800">莊志勇 校長</strong>
-            </div>
-          </div>
-
-          <div class="mt-5 pt-4 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3 text-xs text-stone-500">
-            <span>© 2026 NTSRL New Taipei City Self-Regulated Learning Action Community.</span>
-            <div class="flex items-center gap-3">
-              <span class="hover:text-season-primary cursor-pointer" onclick="openModal('privacy')">隱私與智慧財產權</span>
-              <span class="hover:text-season-primary cursor-pointer" onclick="openModal('cite')">文獻引用指引</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- 燈箱 Modal (用於呈現高清相片細節與故事) -->
-  <div id="lightbox-modal" class="fixed inset-0 z-50 bg-stone-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
-      <button onclick="closeLightbox()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black transition">
-        <i class="ph ph-x text-lg"></i>
+    <!-- 線上回饋區塊 -->
+    <section id="feedback" class="bg-emerald-800 text-white p-8 rounded-2xl text-center space-y-4">
+      <h2 class="text-2xl font-bold">歡迎提供本期季刊回饋與實踐投稿</h2>
+      <p class="text-sm text-emerald-100 max-w-xl mx-auto">
+        各校若有優質之自主學習推動方案或學生展能實務，歡迎填寫回饋表單與工作圈分享。
+      </p>
+      <button class="bg-white text-emerald-800 font-bold px-6 py-2.5 rounded-full hover:bg-emerald-50 transition shadow">
+        前往填寫回饋表單
       </button>
-      <div id="lightbox-body" class="p-0">
-        <!-- 內容動態注入 -->
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- 提示訊息 Toast 浮窗 -->
-  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-stone-900 text-white px-5 py-3 rounded-xl shadow-xl text-xs font-medium transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2">
-    <i class="ph ph-check-circle text-emerald-400 text-base" id="toast-icon"></i>
-    <span id="toast-msg">已成功切換主題</span>
-  </div>
+  </main>
 
-  <!-- 雜誌精選文章完整數據庫與互動邏輯 -->
+  <!-- 頁尾 -->
+  <footer class="bg-gray-100 border-t border-gray-200 py-8 text-center text-xs text-gray-500 space-y-2">
+    <p>© 新北市促進自主學習課堂實踐行動工作圈 版權所有</p>
+    <p>建議使用 Chrome、Edge 或 Safari 瀏覽以獲得最佳視覺體驗</p>
+  </footer>
+
+  <!-- 手機版選單切換 JavaScript -->
   <script>
-    // 文章完整內容庫 (精準提取並編排自 PDF 原刊物)
-    const articlesDB = {
-      theme: {
-        category: "主題報導 · SPECIAL FEATURE",
-        tagColor: "bg-amber-100 text-amber-900",
-        title: "邊界與共振：人—AI 協同調節學習的意義與課堂實踐（上）",
-        subtitle: "——從 AI 進入課堂教學的趨勢與研究談起",
-        author: "洪詠善 研究員",
-        authorTitle: "國家教育研究院課程及教學研究中心",
-        readTime: "12 分鐘精讀",
-        content: `
-          <div class="space-y-6 text-stone-800">
-            <div class="p-6 rounded-2xl bg-amber-50/70 border-l-4 border-season-primary text-stone-700 italic font-serif leading-relaxed">
-              「邊界」指在人機合作中，哪些思考、情感、價值判斷與責任必須由人承擔，不能外包給 AI；「共振」則指人與 AI 的回饋相互激盪，使學生的提問、策略與反思逐輪深化，產生『我真的懂了、我知道自己怎麼學會的』有感經驗。
-            </div>
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
 
-            <h3 class="text-xl font-serif font-bold text-stone-900 pt-2">壹、前言：當 AI 成為教室裡的「第三位學習者」</h3>
-            <p class="dropcap">
-              走進今日的國中教室，教師與學生外，有時會多了一個參與者「AI」。現場與教師社群共備時，老師多會應用 AI 於課前請 AI 協助分析單元目標、製作差異化學習單；課堂上引導學生應用平板向 AI 學習夥伴提問、或是請 AI 檢查英文句型或數學解題步驟；課後則用 AI 協助彙整學生的作答歷程與回饋。近一年來，越來越多老師靈活使用 AI，讓 AI 參與到教與學的「調節」歷程之中。
-            </p>
-            <p>
-              當前教師最常問的問題：當 AI 愈能幹，學生是真的學會了？當 AI 可以替學生規劃、提示、檢查甚至反思，學生自己的目標感、策略選擇與自我監控，是被強化，還是被悄悄取代？這些問題正是新北市推動課堂教學促進自主學習（NTSRL）在 115 學年度納入 AI 後，所要回應的核心課題。
-            </p>
-
-            <h3 class="text-xl font-serif font-bold text-stone-900 pt-4">貳、AI進入教學的國際研究發現：不可忽視的三大提醒</h3>
-            <p>
-              <strong>1. 沒有護欄的 AI 可能帶來「表現與學習的悖論」：</strong> Bastani 等人（2025）在土耳其高中數學課進行約千名學生的田野實驗發現，使用一般型 GPT 練習的學生，練習表現提升 48%，但在移除 AI 後的真實考試中，表現反而比未使用 AI 者低 17%；而設計了教學護欄、只給提示不給答案的「GPT Tutor」版本，則消除了此負面影響。OECD（2026）稱之為「表現與學習的悖論」（performance-learning paradox）。
-            </p>
-            <p>
-              <strong>2. 提防後設認知惰性（Metacognitive Laziness）：</strong> Fan 等人（2025）發現 ChatGPT 組雖然產出作品分數較高，卻未在知識獲得與遷移上勝出，且學生極少進行自我監控。一旦撤除 AI，品質隨即下降。把思考過度卸載給外部工具，學習就會變淺。
-            </p>
-            <p>
-              <strong>3. 教師在課堂中的專業轉化不可替代：</strong> Lee（2026）系統回顧指出，AI 產出的資訊絕不會自動成為教學行動，唯有經過教師「監看—判斷—介入—統整」的循環，才能轉化為適切的課堂支持。
-            </p>
-
-            <h3 class="text-xl font-serif font-bold text-stone-900 pt-4">參、從自我調節到人-AI 協同調節（HA-CoRL）</h3>
-            <p>
-              自我調節學習（Self-Regulated Learning, SRL）是學習者為達成目標，主動協調認知、後設認知、動機、情緒與行動的循環歷程（規劃—執行與監控—反思與調整）。而在 <strong>人-AI 協同調節學習（Human-AI Co-Regulated Learning, HA-CoRL）</strong> 中，AI 可扮演認知鷹架與外部記憶，成為「認知夥伴」，但 Agustin（2026）指出：協同調節的設計目的不是消除所有困難，而是保持「具有生產力的後設認知摩擦」（productive metacognitive friction），促使學生停下來比較、解釋與重新判斷。
-            </p>
-
-            <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
-              <h4 class="font-bold text-stone-900 mb-2 font-serif">★ 教師彈性選用調節模式的「五問」檢核：</h4>
-              <ol class="list-decimal list-inside space-y-1.5 text-xs sm:text-sm text-stone-700">
-                <li><strong>目標：</strong>學生必須親自形成、能遷移的核心能力是什麼？</li>
-                <li><strong>價值：</strong>不用 AI 是否更能保留必要的認知、身體或人際經驗？</li>
-                <li><strong>角色：</strong>AI 只提供單點鷹架，還是需要參與多輪比較、監控與修正？</li>
-                <li><strong>風險：</strong>工具是否適齡、合規？資料偏誤與依賴風險如何控制？</li>
-                <li><strong>證據：</strong>如何看見學生的目標、查證、採捨理由與無 AI 時的獨立表現？</li>
-              </ol>
-            </div>
-          </div>
-        `
-      },
-
-      editor: {
-        category: "主編的話 · EDITORIAL",
-        tagColor: "bg-amber-100 text-amber-900",
-        title: "在 AI 的速度裡，守住學習的深度",
-        subtitle: "——從自主學習走向人—AI 協同調節的共學旅程",
-        author: "陳君武 校長",
-        authorTitle: "新北市立福和國中 / 2026秋季號主編",
-        readTime: "4 分鐘精讀",
-        content: `
-          <div class="space-y-6 text-stone-800">
-            <div class="p-6 rounded-2xl bg-stone-100 border-l-4 border-season-primary text-stone-700 italic font-serif leading-relaxed">
-              「完成了」不等於「學會了」；「得到答案」更不等於「擁有能力」。人機協作的目的，不是讓 AI 替學生做得更多，而是讓孩子在協作中學得更深。
-            </div>
-            <p class="dropcap">
-              當 AI 已能快速生成答案、規劃學習、診斷錯誤，甚至提供反思建議，我們不禁要問：當科技愈來愈能幹，孩子是否真的愈來愈會學習？走進今日的教室，我們欣喜於 AI 協助學生突破學習障礙，也隱隱擔憂：當答案唾手可得，孩子是否逐漸失去提問、思辨與探索的耐心？科技提升了任務完成的效率，卻不必然帶來深刻的理解與學習遷移。
-            </p>
-            <p>
-              NTSRL 走過六年的深耕歷程，從課堂微改變出發，逐漸累積跨校、跨領域的專業共學經驗。115 學年度，我們修訂「國民中學促進自主學習課堂五要素 15 原則」，將數位與 AI 融入教學實踐，讓這套架構成為教師與陪伴專家共同觀察、對話與精進的專業語言，而非制式的評鑑檢核表。
-            </p>
-            <p>
-              最令我感動的，是本期季刊中孩子們真誠的成長故事。有人從善用零碎時間開始，逐漸學會自我管理；有人借助 AI 整理知識、練習表達、理解錯誤；也有人從熱愛籃球的興趣出發，展開獨立研究，學習為自己的選擇負責。當孩子能說清楚「我為什麼這樣學、如何知道自己學會了、下一步可以怎麼改進」，自主學習便真正開始發生。
-            </p>
-          </div>
-        `
-      },
-
-      shimen: {
-        category: "社群交流站 · COMMUNITY INSIGHTS",
-        tagColor: "bg-emerald-100 text-emerald-900",
-        title: "AI 融入自主學習：成為檢視學習的鏡子",
-        subtitle: "——引導國九會考備戰中的自我理解與時間覺察",
-        author: "張書涵 教師",
-        authorTitle: "新北市立石門實驗國中",
-        readTime: "5 分鐘精讀",
-        content: `
-          <div class="space-y-6 text-stone-800">
-            <p class="dropcap">
-              在九年級準備會考的過程中，「自主學習」常被理解為訂定目標、安排讀書進度、完成每日計畫。學生逐漸學會如何規劃時間，也知道要為自己設定目標，然而，我在教學現場發現一個值得重新思考的問題：當努力與學習成果不成正比時，學生是否知道如何回頭理解自己的學習？
-            </p>
-            <p>
-              學生知道自己考了幾分，卻不一定記得考試前的時間花在哪裡；「我要更努力」成為最常見的反思，卻很難轉化為具體行動。因此，我開始嘗試將 AI 融入考後歷程：
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-              <div class="p-4 bg-stone-50 rounded-xl border border-stone-200">
-                <h4 class="font-bold text-stone-900 text-sm mb-1">第一步：回到真實生活紀錄</h4>
-                <p class="text-xs text-stone-600">整理 24 小時分配（通勤、補習、滑手機、真實專注時間）與各科準備方式，轉化為看得見的學習證據。</p>
-              </div>
-              <div class="p-4 bg-stone-50 rounded-xl border border-stone-200">
-                <h4 class="font-bold text-stone-900 text-sm mb-1">第二步：讓 AI 作為提問的鏡子</h4>
-                <p class="text-xs text-stone-600">不讓 AI 直接給讀書計畫，而是設定 AI 角色向學生提出反思問題：「英文花了三小時抄寫單字，記住多少？數學錯題是否有重新計算？」</p>
-              </div>
-            </div>
-            <p>
-              守住界線：<strong>AI 可以分析，但不替學生設定目標。</strong> 學生必須從 AI 給予的建議中，挑出三個「自己願意且能做到的微改變」（例如：睡前複習 10 個單字、滑手機時間減少 20 分鐘）。真正的自主學習不是有人替學生找到答案，而是學生能從經驗中理解自己並採取行動。
-            </p>
-          </div>
-        `
-      },
-
-      sel: {
-        category: "社群交流站 · CLASSROOM CULTURE",
-        tagColor: "bg-blue-100 text-blue-900",
-        title: "打造自主學習的班級文化——七個習慣與 SEL 的實踐路",
-        subtitle: "——從以終為始到學習契約、共學小組與學習儀表板",
-        author: "李欣頤 教師",
-        authorTitle: "新北市立福和國中",
-        readTime: "6 分鐘精讀",
-        content: `
-          <div class="space-y-6 text-stone-800">
-            <p class="dropcap">
-              當常態編班遇上在疫情下長大的數位原住民，除了需要處理班上學生課業成績的 M 型化，更須直面學生普遍缺乏閱讀能力與專注力不足的困境。自主學習若缺乏引導，多半淪為放牛吃草。我嘗試以「七個習慣」結合社會情緒學習（SEL），透過系統化工具深植班級文化：
-            </p>
-            <ul class="space-y-4">
-              <li class="p-4 rounded-xl bg-stone-50 border border-stone-200">
-                <strong class="text-stone-900 font-bold block mb-1">1. 以終為始：親師生「學習契約」</strong>
-                <p class="text-xs text-stone-600 leading-relaxed">
-                  抽取諾爾斯契約學習原型，白紙黑字訂定個人段考小考目標與期望獎勵。段考獎勵由家長親筆寫下承諾，親、師、生三方簽署見證，每次段考後進行評估與修正。
-                </p>
-              </li>
-              <li class="p-4 rounded-xl bg-stone-50 border border-stone-200">
-                <strong class="text-stone-900 font-bold block mb-1">2. 雙贏思維：共學小組與「情感帳戶存提款機制」</strong>
-                <p class="text-xs text-stone-600 leading-relaxed">
-                  將信任隱喻為銀行帳戶：鼓勵互助與守諾為存款（+2000、+3000），破壞秩序與爭執為提款。制定「725 情感帳戶價目表」，凝聚團隊共好歸屬感。
-                </p>
-              </li>
-              <li class="p-4 rounded-xl bg-stone-50 border border-stone-200">
-                <strong class="text-stone-900 font-bold block mb-1">3. 不斷更新：我的學習儀表板</strong>
-                <p class="text-xs text-stone-600 leading-relaxed">
-                  八升九年級階段，引導學生從目標規劃、學習方法、錯誤訂正到家庭支持面向填寫儀表板，練習為自己做出負責任的決定。
-                </p>
-              </li>
-            </ul>
-          </div>
-        `
-      },
-
-      pbl: {
-        category: "社群交流站 · AI x PBL",
-        tagColor: "bg-violet-100 text-violet-900",
-        title: "AI x PBL：讓想法動起來，讓創意做出來",
-        subtitle: "——AI 融入國中專題式學習的教學創新與實作探索",
-        author: "林韋廷 教師",
-        authorTitle: "新北市立福和國中",
-        readTime: "6 分鐘精讀",
-        content: `
-          <div class="space-y-6 text-stone-800">
-            <p class="dropcap">
-              「知識為動力，實踐成能力。」專題式學習（PBL）以真實且具探究價值的問題為起點。當 AI 遇上 PBL，科技降低了資料整理與編碼的門檻，讓國中生能將心力投入於問題定義、機構設計與交叉驗證。
-            </p>
-            <div class="p-4 rounded-2xl bg-stone-100 border border-stone-200">
-              <h4 class="font-bold text-stone-900 text-sm mb-2">課堂實例：AI 影像辨識智能分揀流水線</h4>
-              <p class="text-xs text-stone-600 leading-relaxed">
-                在跨生活科技與資訊科技的專題中，學生利用電腦鏡頭採集不同生活廢棄物（如鐵罐、保特瓶、鋁箔包）的特徵進行模型訓練，並以傳送帶機構與單臂推送電機結合。當辨識到特定材質時，連動伺服馬達推入相應回收桶。
-              </p>
-            </div>
-            <p>
-              學生不再只問「請告訴我怎麼做」，而是深入探討：「為什麼光線改變時會誤判？模型訓練的樣本數足夠嗎？這個建議的限制是什麼？」讓學生在實作中培養數據素養與工程思維。
-            </p>
-          </div>
-        `
-      },
-
-      voices: {
-        category: "青聽學習 · STUDENT REFLECTIONS",
-        tagColor: "bg-teal-100 text-teal-900",
-        title: "青春的蛻變與成長：四位同學的自主學習心聲",
-        subtitle: "——從零碎時間的微光，到找到自己專屬的 AI 學習神隊友",
-        author: "新北國中學生社群",
-        authorTitle: "福和國中 / 漳和國中 / 石門實中 / 永和國小",
-        readTime: "8 分鐘精讀",
-        content: `
-          <div class="space-y-6 text-stone-800">
-            <div class="border-b border-stone-200 pb-5">
-              <h4 class="font-serif font-bold text-base text-stone-900">1. 青春的蛻變——在自主學習中成長（福和國中 洪晨瑄）</h4>
-              <p class="text-xs text-stone-600 mt-2 leading-relaxed">
-                「在沒有參加校外補習的情況下，AI 扮演了最可靠的私人家教。面對最讓我害羞的英文口說，我用 AI 進行無壓力的對話練習，它用『三明治溝通法』帶給我勇氣。但對我來說，AI 是良師、是益友，絕不是替身。我始終掌握了學習的主導權。」
-              </p>
-            </div>
-
-            <div class="border-b border-stone-200 pb-5">
-              <h4 class="font-serif font-bold text-base text-stone-900">2. 從喜歡籃球到學會為學習做決定（漳和國中 許愷恩）</h4>
-              <p class="text-xs text-stone-600 mt-2 leading-relaxed">
-                「八年級我決定獨立研究 NBA 球員 Stephen Curry。我不只看影片，還去聽受訪球員的 Podcast，探討他的無球跑動與身體重心。這次自主學習讓我學到：把複雜的專業講得淺顯易懂，並為自己的每個選擇獨立負責。」
-              </p>
-            </div>
-
-            <div class="border-b border-stone-200 pb-5">
-              <h4 class="font-serif font-bold text-base text-stone-900">3. 零碎時間裡的微光（石門實驗國中 練雨汝）</h4>
-              <p class="text-xs text-stone-600 mt-2 leading-relaxed">
-                「七年級早上八點前我只會聊天發呆，九年級為了會考，我利用早上 20 分鐘背單字、訂正考卷。老師教我們運用 AI 診斷拖延原因，我學會把手機放遠、先做簡單任務。訂計畫不一定每次完美，重要的是願意調整。」
-              </p>
-            </div>
-
-            <div>
-              <h4 class="font-serif font-bold text-base text-stone-900">4. 我的專屬 AI 小助手（福和國中 張嘉心）</h4>
-              <p class="text-xs text-stone-600 mt-2 leading-relaxed">
-                「我善用 NotebookLM 與 ChatGPT 將繁複的歷史地理整理成對比表格。但我知道 AI 是工具，整理出來的條列重點還是需要靠自己的腦袋理解與驗證。」
-              </p>
-            </div>
-          </div>
-        `
-      },
-
-      agent: {
-        category: "新知報報 · TECH IN EDUCATION",
-        tagColor: "bg-cyan-100 text-cyan-900",
-        title: "生成式 AI 從「會回答」到「會辦事」在教材轉化的應用與限制",
-        subtitle: "——一位高中化學教師與 AI 代理層協作的深刻反思",
-        author: "陳逸年 研究教師",
-        authorTitle: "高中化學教師 / 商借國家教育研究院",
-        readTime: "8 分鐘精讀",
-        content: `
-          <div class="space-y-6 text-stone-800">
-            <p class="dropcap">
-              多數教師與生成式 AI 的第一次接觸，往往在失望中結束：「幫我出五題題目」，結果一兩題與課本不符就關掉視窗。這個盲點在於：使用者沒有提供真實的教材講義作為錨定背景，AI 只能憑語言機率空想。
-            </p>
-            <h4 class="font-bold text-stone-900 font-serif text-lg">教育現場 AI 的三層次演進</h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-3 text-xs">
-              <div class="p-3 bg-stone-50 rounded-xl border border-stone-200">
-                <strong class="text-stone-800 block mb-1">01 搜尋層</strong>
-                輸入關鍵字獲取連結，篩選責任全在使用者（如 Google）。
-              </div>
-              <div class="p-3 bg-stone-50 rounded-xl border border-stone-200">
-                <strong class="text-stone-800 block mb-1">02 對話層</strong>
-                你問一句它答一句，關掉視窗後無記憶延續，不翻課本。
-              </div>
-              <div class="p-3 bg-stone-50 rounded-xl border border-stone-200">
-                <strong class="text-season-primary font-bold block mb-1">03 代理層 (AI Agent)</strong>
-                接受目標任務與批次檔案，自行拆解步驟執行並留下稽核痕跡。
-              </div>
-            </div>
-            <p>
-              <strong>帶 AI 如同帶實習老師：</strong> 委託時應「目標導向而非步驟導向」，最重要的是錨定真實來源，並要求在每道題目中標記學生的<strong>「錯誤成因（迷思結構）」</strong>（例如：學生說汽水透明均勻所以是純物質，錯誤成因在於以巨觀外觀取代組成判準）。
-            </p>
-            <p>
-              <strong>人機協作的保險栓：</strong>「這堪不堪用」的終極判斷權始終在教師手中。AI 最擅長的是「看起來都做好了」，品質把關才是教師不可被取代的專業底氣。
-            </p>
-          </div>
-        `
-      },
-
-      book: {
-        category: "專書推薦 · BOOK SPOTLIGHT",
-        tagColor: "bg-amber-100 text-amber-900",
-        title: "當 AI 能給出答案，我們更要教會孩子如何學習",
-        subtitle: "——《啟動孩子自主學習力的 13 把關鍵鑰匙》專書推薦",
-        author: "陳君武 校長",
-        authorTitle: "新北市立福和國中",
-        readTime: "5 分鐘精讀",
-        content: `
-          <div class="space-y-6 text-stone-800">
-            <p class="dropcap">
-              當當代家長與教師焦慮孩子過度依賴手機與 AI、缺乏主動性時，《啟動孩子自主學習力的 13 把關鍵鑰匙》從教學現場的迷思與痛點出發，提煉出「觀念重塑、起跑預備、課堂實踐、學習新定義」四條路徑。
-            </p>
-            <div class="p-5 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-2 text-xs sm:text-sm text-stone-700">
-              <p>• <strong>動機可以設計</strong>：自主不是放手，而是從關係與鷹架中長出力量。</p>
-              <p>• <strong>策略可以教導</strong>：讓思考可見，擺脫「薛丁格的會（看似懂卻不會做）」。</p>
-              <p>• <strong>家校同行哲學</strong>：從年幼時的「領跑」、青春期的「陪跑」，到成熟時帶著信任的「觀跑」。</p>
-            </div>
-            <p>
-              中山國中許佳萱老師曾說：「自主學習是學生的課，也是教師的路。」這本書凝聚 NTSRL 六年微改變的智慧，不是交給孩子一張標準答案，而是遞給他一把開啟未知世界的鑰匙。
-            </p>
-          </div>
-        `
-      }
-    };
-
-    // 相簿數據庫
-    const galleryDB = {
-      workshop1: {
-        title: "115學年度第一學期行政會議與專家共識會議紀實",
-        school: "福和國中 / 跨校社群",
-        img: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1200&q=80",
-        desc: "教育局中教科劉雅琪科長親臨會場，為全體陪伴專家頒發聘書。會議聚焦發布《NTSRL 協作實務手冊》，以 GROW 對話模式陪伴全體 23 個自主學習實踐學校，建立共備社群文化。"
-      },
-      pbl1: {
-        title: "AI 影像辨識與自動輸送分揀機構實作",
-        school: "福和國中 / 林韋廷老師指導",
-        img: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80",
-        desc: "學生結合 Python 程式邏輯、Teachable Machine 影像模型與生活科技連桿機構，組裝出能自動辨識保特瓶與鋁罐的智能輸送帶，親身體驗數據多樣性與硬體整合的挑戰。"
-      },
-      student1: {
-        title: "跨校研習學生自主發表會——許愷恩同學的 NBA 探究",
-        school: "漳和國中 / 跨校公開課",
-        img: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80",
-        desc: "八年級學生以喜愛的球星 Stephen Curry 為核心展開研究，上台與國家教育研究院研究員及數十位跨校師長娓娓道來自己查證 Podcast 與分析比賽戰術的獨立學習歷程。"
-      },
-      class1: {
-        title: "親師生共同簽署的自主學習契約書與情感帳戶",
-        school: "福和國中 / 李欣頤老師班級",
-        img: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1200&q=80",
-        desc: "七個習慣融入班級經營，將自主目標契約化、情感帳戶數值化，讓國中學生在穩定的信任關係中學會自我管理與反思修正。"
-      },
-      workshop2: {
-        title: "探究、對話、精進：社群召集學校共備月例會",
-        school: "南勢國中 / 黃淑君校長",
-        img: "https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1200&q=80",
-        desc: "各校社群召集人共同商討如何翻轉傳統寒假作業，建立學生自主設定目標與 70% 歷程評量的評鑑規準，迎向下學期大型成果發表展演。"
-      },
-      student2: {
-        title: "踏跡展路露新機：社區文史走讀與數位記錄",
-        school: "貢寮實中 & 光榮國中",
-        img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80",
-        desc: "新加入的實踐社群帶領孩子深入地方聚落，以訪談和攝影記錄鄉土文化，再將資料與 AI 輔助工具對話，輸出具在地特色的專題口袋書。"
-      }
-    };
-
-    // 載入文章邏輯
-    function loadArticle(articleKey) {
-      const art = articlesDB[articleKey];
-      if (!art) return;
-
-      const container = document.getElementById('article-content-wrapper');
-      container.innerHTML = `
-        <div class="border-b border-stone-200 pb-8 mb-8 animate-in fade-in duration-300">
-          <div class="flex flex-wrap items-center gap-2 mb-3">
-            <span class="px-3 py-1 rounded-full text-xs font-bold ${art.tagColor}">
-              ${art.category}
-            </span>
-            <span class="text-xs text-stone-400 font-mono flex items-center gap-1">
-              <i class="ph ph-clock"></i> ${art.readTime}
-            </span>
-          </div>
-
-          <h2 class="text-2xl sm:text-4xl font-serif font-black text-stone-900 tracking-tight leading-tight">
-            ${art.title}
-          </h2>
-          ${art.subtitle ? `<p class="text-stone-500 font-serif text-sm sm:text-base mt-2">${art.subtitle}</p>` : ''}
-
-          <div class="flex items-center gap-3 mt-6 pt-6 border-t border-stone-100">
-            <div class="w-10 h-10 rounded-full bg-season-primary text-white flex items-center justify-center font-serif font-bold text-base shadow-xs">
-              ${art.author.charAt(0)}
-            </div>
-            <div>
-              <div class="text-sm font-bold text-stone-900">${art.author}</div>
-              <div class="text-xs text-stone-500">${art.authorTitle}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="article-body">
-          ${art.content}
-        </div>
-
-        <div class="mt-12 pt-6 border-t border-stone-200 flex flex-wrap items-center justify-between text-xs text-stone-500 gap-4">
-          <div class="flex items-center gap-2">
-            <span>分享此篇好文：</span>
-            <button onclick="copyCurrentUrl()" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-stone-200 text-stone-700 transition">複製連結</button>
-          </div>
-          <a href="#hero" class="text-season-primary hover:underline font-bold flex items-center gap-1">
-            返回刊物頂部 <i class="ph ph-arrow-up"></i>
-          </a>
-        </div>
-      `;
-
-      // 更新頂端微標題與分頁啟用狀態
-      document.getElementById('reader-current-title').textContent = `${art.title}（${art.author}）`;
-      
-      document.querySelectorAll('.article-tab').forEach(btn => {
-        if (btn.getAttribute('data-id') === articleKey) {
-          btn.className = "article-tab text-xs px-3 py-1.5 rounded-lg bg-season-primary text-white font-bold whitespace-nowrap shadow-xs transition";
-        } else {
-          btn.className = "article-tab text-xs px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-700 font-medium whitespace-nowrap transition";
-        }
-      });
-
-      // 平滑捲動至精讀器
-      const readerElem = document.getElementById('reader');
-      const navHeight = document.getElementById('main-nav').offsetHeight;
-      const targetPos = readerElem.getBoundingClientRect().top + window.pageYOffset - navHeight - 10;
-      window.scrollTo({ top: targetPos, behavior: 'smooth' });
-    }
-
-    // 四季色系切換控制
-    function setSeason(seasonName) {
-      document.body.setAttribute('data-season', seasonName);
-      
-      const badge = document.getElementById('current-badge');
-      const seasonMap = {
-        spring: { label: '春季版主題 (櫻綠)', notify: '已切換為：春季色系（櫻粉嫩綠淡雅風格）' },
-        summer: { label: '夏季版主題 (湛藍)', notify: '已切換為：夏季色系（清新薄荷湛藍風格）' },
-        autumn: { label: '2026 秋季號 (本期預設)', notify: '已切換為：秋季色系（暖楓焦糖大地棕風格）' },
-        winter: { label: '冬季版主題 (冰川霧灰)', notify: '已切換為：冬季色系（沉靜霧灰冰川藍風格）' }
-      };
-
-      if (badge && seasonMap[seasonName]) {
-        badge.textContent = seasonMap[seasonName].label;
-      }
-
-      // 更新按鈕樣式狀態
-      document.querySelectorAll('.season-btn').forEach(btn => {
-        btn.classList.remove('bg-white', 'shadow-sm', 'font-bold', 'text-stone-900');
-      });
-      const activeBtn = document.getElementById('btn-' + seasonName);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-white', 'shadow-sm', 'font-bold', 'text-stone-900');
-      }
-
-      showToast(seasonMap[seasonName].notify);
-    }
-
-    // 護眼紙質模式切換
-    function togglePaperMode() {
-      const isPaper = document.body.classList.toggle('paper-mode');
-      const btn = document.getElementById('paper-toggle');
-      if (isPaper) {
-        btn.classList.add('bg-amber-200', 'text-amber-950');
-        showToast('已開啟「柔和暖紙」閱讀模式');
-      } else {
-        btn.classList.remove('bg-amber-200', 'text-amber-950');
-        showToast('已恢復預設紙質底色');
-      }
-    }
-
-    // 字級縮放調整 (A- / A / A+)
-    function adjustFontSize(size) {
-      const wrapper = document.getElementById('article-content-wrapper');
-      wrapper.classList.remove('font-size-sm', 'font-size-md', 'font-size-lg');
-      wrapper.classList.add('font-size-' + size);
-      showToast('已調整閱讀字級大小');
-    }
-
-    // 閱讀進度條監聽
-    window.addEventListener('scroll', () => {
-      const winScroll = document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      document.getElementById('reading-progress').style.width = scrolled + '%';
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
     });
 
-    // 相簿篩選器
-    function filterGallery(category) {
-      document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
-        if (btn.getAttribute('data-filter') === category) {
-          btn.className = "gallery-filter-btn px-3 py-1.5 rounded-lg bg-season-primary text-white font-bold transition";
-        } else {
-          btn.className = "gallery-filter-btn px-3 py-1.5 rounded-lg bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 transition";
-        }
+    // 點選手機選單任一項目後自動收合
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
       });
-
-      const items = document.querySelectorAll('.gallery-item');
-      items.forEach(item => {
-        if (category === 'all' || item.getAttribute('data-category') === category) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    }
-
-    // 燈箱 Lightbox 打開
-    function openLightbox(key) {
-      const data = galleryDB[key];
-      if (!data) return;
-
-      const body = document.getElementById('lightbox-body');
-      body.innerHTML = `
-        <div class="relative max-h-[70vh] bg-stone-900 overflow-hidden">
-          <img src="${data.img}" alt="${data.title}" class="w-full h-full object-contain max-h-[60vh] mx-auto">
-        </div>
-        <div class="p-6 bg-white">
-          <span class="text-xs font-bold text-season-primary uppercase tracking-wider">${data.school}</span>
-          <h3 class="text-xl font-bold font-serif text-stone-900 mt-1">${data.title}</h3>
-          <p class="text-sm text-stone-600 mt-3 leading-relaxed">${data.desc}</p>
-        </div>
-      `;
-
-      const modal = document.getElementById('lightbox-modal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function closeLightbox() {
-      const modal = document.getElementById('lightbox-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    }
-
-    // 點擊燈箱背景關閉
-    document.getElementById('lightbox-modal').addEventListener('click', function(e) {
-      if (e.target === this) closeLightbox();
     });
-
-    // 行動端選單展開
-    function toggleMobileMenu() {
-      const menu = document.getElementById('mobile-menu');
-      menu.classList.toggle('hidden');
-    }
-
-    // 複製連結
-    function copyCurrentUrl() {
-      const dummy = document.createElement('input');
-      document.body.appendChild(dummy);
-      dummy.value = window.location.href;
-      dummy.select();
-      document.execCommand('copy');
-      document.body.removeChild(dummy);
-      showToast('已複製文章連結至剪貼簿');
-    }
-
-    // 顯示訊息彈窗 Toast (替代原生 alert)
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      const text = document.getElementById('toast-msg');
-      text.textContent = msg;
-      toast.classList.remove('translate-y-20', 'opacity-0');
-      setTimeout(() => {
-        toast.classList.add('translate-y-20', 'opacity-0');
-      }, 2500);
-    }
-
-    function downloadCurrentIssueNotice() {
-      showToast('準備下載：2026年NTSRL自主學習季刊秋季號.pdf');
-    }
-
-    function downloadPdf(issue) {
-      showToast(`正在下載【${issue}】典藏完整電子版 PDF`);
-    }
-
-    function alertArchivedNotice(issueName) {
-      showToast(`已載入【${issueName}】歷史精華目錄清單`);
-    }
-
-    function openModal(type) {
-      if (type === 'privacy') {
-        showToast('本刊物圖文版權屬新北市教育局與原作者共有，非營利教育推廣歡迎轉載引用。');
-      } else if (type === 'cite') {
-        showToast('引用格式請參閱教育部 APA 第七版規範，標註作者、發行年份與篇名。');
-      }
-    }
-
-    // 頁面初始化加載預設首篇主題文章
-    window.onload = function() {
-      loadArticle('theme');
-    };
   </script>
 
 </body>
